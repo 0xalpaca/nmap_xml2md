@@ -35,7 +35,7 @@ def parse_nmap_xml(xml_file):
 
             with open(os.path.join(ip, protocol + "-" + port_number + ".md"), 'w') as f:
                 f.write('# ' + protocol + "-" + port_number + "\n\n")
-                f.write("'''bash\n")
+                f.write("```bash\n")
                 for element in port.iter():
                     if element.tag == "state":
                         f.write(f"State: {element.get('state')}\n")
@@ -47,7 +47,7 @@ def parse_nmap_xml(xml_file):
                     elif element.tag == "script":
                         f.write(f"Script: {element.get('id')}\n")
                         f.write(f"Output: {element.get('output')}\n")
-                f.write("'''\n")
+                f.write("```\n")
 
 
 if __name__ == '__main__':
