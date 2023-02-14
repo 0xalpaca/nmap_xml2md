@@ -40,7 +40,7 @@ def parse_nmap_xml(xml_file):
                 fi.write(">- [[" + protocol + "-" + port_number + "]]\n")
 
                 with open(os.path.join(ip, protocol + "-" + port_number + ".md"), 'w') as fp:
-                    fp.write("```bash\n")
+                    fp.write("```nmap\n")
                     for element in port.iter():
                         if element.tag == "state":
                             fp.write(f"State: {element.get('state')}\n")
