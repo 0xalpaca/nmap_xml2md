@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import os
 import xml.etree.ElementTree as ElementTree
 import argparse
