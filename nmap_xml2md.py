@@ -25,29 +25,34 @@ def parse_nmap_xml(xml_file):
     root = tree.getroot()
     for host in root.findall('host'):
         ip = host.find('address').get('addr')
-        if not os.path.exists(ip):
-            os.makedirs(ip)
+        os.makedirs(ip)
 
-        for port in host.findall('ports/port'):
-            port_number = port.get('portid')
-            protocol = port.get('protocol')
-            print(port_number)
+        print(f"[+] Created folder {ip}")
 
-            with open(os.path.join(ip, protocol + "-" + port_number + ".md"), 'w') as f:
-                f.write('# ' + protocol + "-" + port_number + "\n\n")
-                f.write("```bash\n")
-                for element in port.iter():
-                    if element.tag == "state":
-                        f.write(f"State: {element.get('state')}\n")
-                        f.write(f"{element.get('reason')}\n")
-                    elif element.tag == "service":
-                        f.write(f"Service: {element.get('name')}\n")
-                        f.write(f"Product: {element.get('product')}\n")
-                        f.write(f"Version: {element.get('version')}\n")
-                    elif element.tag == "script":
-                        f.write(f"Script: {element.get('id')}\n")
-                        f.write(f"Output: {element.get('output')}\n")
-                f.write("```\n")
+        with open(os.path.join(ip, ip + ".md"), 'a') as fi:
+
+            fi.write(">[!info] Open ports\n")
+
+            for port in host.findall('ports/port'):
+                port_number = port.get('portid')
+                protocol = port.get('protocol')
+
+                fi.write(">- [[" + protocol + "-" + port_number + "]]\n")
+
+                with open(os.path.join(ip, protocol + "-" + port_number + ".md"), 'w') as fp:
+                    fp.write("```bash\n")
+                    for element in port.iter():
+                        if element.tag == "state":
+                            fp.write(f"State: {element.get('state')}\n")
+                            fp.write(f"{element.get('reason')}\n")
+                        elif element.tag == "service":
+                            fp.write(f"Service: {element.get('name')}\n")
+                            fp.write(f"Product: {element.get('product')}\n")
+                            fp.write(f"Version: {element.get('version')}\n")
+                        elif element.tag == "script":
+                            fp.write(f"Script: {element.get('id')}\n")
+                            fp.write(f"Output: {element.get('output')}\n")
+                    fp.write("```\n")
 
 
 if __name__ == '__main__':
